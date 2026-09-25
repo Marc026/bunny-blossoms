@@ -703,6 +703,7 @@ footer{text-align:center; color:var(--ink-2); font-size:13px; margin-top:34px; f
   <footer>
     made with far too much affection by <b>Marc</b> 🌸🐰<br>
     for <b>Chloe</b>, who is the reason this website is pink
+    <p class="tiny" id="syncNote" style="margin-top:6px"></p>
   </footer>
 </div>
 
@@ -719,8 +720,70 @@ const rnd=(a,b)=>Math.random()*(b-a)+a, pick=a=>a[Math.floor(Math.random()*a.len
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const store={
   get(k,d){ try{const v=localStorage.getItem('bb_'+k); return v===null?d:JSON.parse(v);}catch(e){return d;} },
-  set(k,v){ try{localStorage.setItem('bb_'+k,JSON.stringify(v));}catch(e){} }
+  set(k,v){ try{localStorage.setItem('bb_'+k,JSON.stringify(v));}catch(e){}
+    if(SYNC_ON && SHARED_KEYS.includes(k) && SYNC._push) SYNC._push(k,v); }
 };
+
+/* ================= shared sync (Firebase, optional) =================
+   SETUP — Marc, one-time, about 5 minutes:
+   1. console.firebase.google.com → Add project → name it anything →
+      you can skip Google Analytics, it isn't needed here.
+   2. Left sidebar → Build → Realtime Database → Create Database →
+      pick any region → start in TEST MODE.
+   3. Open that database's "Rules" tab and replace the rules with:
+        { "rules": { ".read": true, ".write": true } }
+      (test-mode rules expire after 30 days — this makes it permanent.
+      Only someone who found your exact databaseURL could read or write
+      this. It's not linked anywhere, just not locked behind a login —
+      fine for a two-person bunny site.)
+   4. Project settings (gear icon, top left) → General tab → scroll to
+      "Your apps" → click the </> (web) icon → register an app (any
+      nickname, skip Firebase Hosting) → it shows a firebaseConfig
+      object → copy its six values into FIREBASE_CONFIG below.
+   5. Save this file and re-upload it to GitHub Pages. Done — you and
+      Chloe now share one bunny, garden, and score board.
+   Leave the placeholders as-is and the site just runs local-only,
+   exactly like before — nothing breaks either way.
+*/
+const firebaseConfig = {
+  apiKey: "AIzaSyA4NWmhQgNdU3BedUMC3YdlExOeddnNSnk",
+  authDomain: "chlo-8ba74.firebaseapp.com",
+  databaseURL: "https://chlo-8ba74-default-rtdb.firebaseio.com",
+  projectId: "chlo-8ba74",
+  storageBucket: "chlo-8ba74.firebasestorage.app",
+  messagingSenderId: "848490841328",
+  appId: "1:848490841328:web:ac5eb3e12a6fafa6baae35",
+  measurementId: "G-DSLKRVVVMH"
+};
+const SYNC_ON = !!(FIREBASE_CONFIG.apiKey && FIREBASE_CONFIG.databaseURL
+  && !FIREBASE_CONFIG.apiKey.startsWith('YOUR_') && !FIREBASE_CONFIG.databaseURL.startsWith('https://YOUR_'));
+// keys that represent "your shared world" — everything else (sound, theme, which
+// tab is open, day streak/visit count) stays local to each device on purpose
+const SHARED_KEYS=['pet','garden','stats','pops','boops','spins','hugs','look',
+  'catchBest','heartBest','simonBest','whackBest','hopBest','slotWins','slotSpins'];
+const SYNC={ listeners:{}, onRemote(k,fn){ (SYNC.listeners[k]=SYNC.listeners[k]||[]).push(fn); } };
+if(SYNC_ON){
+  (async()=>{
+    try{
+      const [{initializeApp},{getDatabase,ref,onValue,update}]=await Promise.all([
+        import('https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js'),
+        import('https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js')
+      ]);
+      const app=initializeApp(FIREBASE_CONFIG), dbRef=ref(getDatabase(app),'couple');
+      const sn=$('#syncNote'); if(sn) sn.textContent='🔗 synced across devices';
+      SYNC._push=(k,v)=>{ try{ update(dbRef,{[k]:v===undefined?null:v}); }catch(e){} };
+      onValue(dbRef, snap=>{
+        const data=snap.val()||{};
+        Object.keys(data).forEach(k=>{
+          if(!SHARED_KEYS.includes(k)) return;
+          const v=data[k];
+          try{ localStorage.setItem('bb_'+k, JSON.stringify(v)); }catch(e){}
+          (SYNC.listeners[k]||[]).forEach(fn=>{ try{ fn(v); }catch(e){} });
+        });
+      });
+    }catch(e){ /* offline, blocked, or config not filled in yet — site stays local-only */ }
+  })();
+}
 let toastT; function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('show');
   clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2000); }
 
@@ -893,6 +956,7 @@ function paintStats(){ $('#sPets').textContent=stats.pets; $('#sPops').textConte
   $('#sBoops').textContent=stats.boops; $('#sPetals').textContent=Math.floor(stats.petals); }
 function saveStats(){ store.set('stats',stats); paintStats(); }
 paintStats();
+SYNC.onRemote('stats', v=>{ Object.assign(stats, v||{}); paintStats(); });
 
 let visits=store.get('visits',0)+1; store.set('visits',visits); $('#sVisits').textContent=visits;
 (function(){
@@ -958,6 +1022,7 @@ $('#surpriseBtn').onclick=()=>{ sfx.win(); pick([
   const btn=$('#hugBtn'), fill=$('#hugFill');
   let raf=null, t0=0, holding=false;
   let n=store.get('hugs',0); $('#hugCount').textContent=n;
+  SYNC.onRemote('hugs', v=>{ n=v||0; $('#hugCount').textContent=n; });
   const DUR=2600;
   function frame(t){
     if(!holding) return;
@@ -1053,6 +1118,8 @@ $('#fortuneBtn').onclick=()=>{ const c=$('[data-jar]'); c.classList.remove('pop-
   const syms=['🌸','🐰','🥕','💖','🍓','🍰'];
   let wins=store.get('slotWins',0), spins=store.get('slotSpins',0), busy=false;
   $('#slotWins').textContent=wins; $('#slotSpins').textContent=spins;
+  SYNC.onRemote('slotWins', v=>{ wins=v||0; $('#slotWins').textContent=wins; });
+  SYNC.onRemote('slotSpins', v=>{ spins=v||0; $('#slotSpins').textContent=spins; });
   $('#slotBtn').onclick=()=>{
     if(busy) return; busy=true; spins++; store.set('slotSpins',spins); $('#slotSpins').textContent=spins;
     $('#slotSay').textContent='…';
@@ -1147,6 +1214,8 @@ makeWheel('wheelDate',DATES,'dateSay','spinDate',r=>{ $('#dateSay').textContent=
   }
   $('#randomFit').onclick=()=>{ LOOK.bow=pick(Object.keys(BOWS)); LOOK.acc=pick(ACCS).id; LOOK.blush=Math.random()<.8; save(); sfx.win(); };
   $('#resetFit').onclick=()=>{ LOOK={bow:'rose',acc:'bow',blush:true}; save(); };
+  REPAINT.push(paintSwatches);
+  SYNC.onRemote('look', v=>{ if(v){ LOOK=Object.assign({bow:'rose',acc:'bow',blush:true},v); repaintBunnies(); } });
   paintSwatches(); repaintBunnies();
 })();
 
@@ -1155,6 +1224,7 @@ makeWheel('wheelDate',DATES,'dateSay','spinDate',r=>{ $('#dateSay').textContent=
   const arena=$('#arena'), run=$('#runner'), msg=$('#cMsg');
   let score=0, time=40, timer=null, live=false, speedy=1, lastMove=0;
   let best=store.get('catchBest',0); $('#cBest').textContent=best;
+  SYNC.onRemote('catchBest', v=>{ if((v||0)>best){ best=v; $('#cBest').textContent=best; } });
   function place(cx,cy){
     const r=arena.getBoundingClientRect(), w=run.offsetWidth||82, h=run.offsetHeight||88;
     let x,y,tries=0;
@@ -1209,6 +1279,7 @@ makeWheel('wheelDate',DATES,'dateSay','spinDate',r=>{ $('#dateSay').textContent=
   const field=$('#hopField'), bun=$('#hopBun'), msg=$('#rMsg');
   let live=false, raf=null, y=0, vy=0, obs=[], clouds=[], t=0, score=0, spd=3.1, last=0, spawnAt=0;
   let best=store.get('hopBest',0); $('#rBest').textContent=best;
+  SYNC.onRemote('hopBest', v=>{ if((v||0)>best){ best=v; $('#rBest').textContent=best; } });
   const GROUND=66, G=0.62, JUMP=11.4;
   function reset(){
     obs.forEach(o=>o.el.remove()); obs=[]; clouds.forEach(c=>c.el.remove()); clouds=[];
@@ -1311,6 +1382,7 @@ makeWheel('wheelDate',DATES,'dateSay','spinDate',r=>{ $('#dateSay').textContent=
   const arena=$('#catchArena'), basket=$('#basket'), msg=$('#hMsg');
   let items=[], score=0, lives=3, live=false, raf=null, spawn=null, bx=.5, last=0;
   let best=store.get('heartBest',0); $('#hBest').textContent=best;
+  SYNC.onRemote('heartBest', v=>{ if((v||0)>best){ best=v; $('#hBest').textContent=best; } });
   const good=['💖','💕','🌸','🍓','🌷','🍰'], bad=['🐝','🐝','🌩'];
   function setBasket(p){ bx=clamp(p,.04,.96); basket.style.left=(bx*100)+'%'; }
   setBasket(.5);
@@ -1360,6 +1432,7 @@ makeWheel('wheelDate',DATES,'dateSay','spinDate',r=>{ $('#dateSay').textContent=
   const pads=$$('#simon .pad'), tones=[392,523,659,784];
   let seq=[], step=0, playing=false, accept=false;
   let best=store.get('simonBest',0); $('#siBest').textContent=best;
+  SYNC.onRemote('simonBest', v=>{ if((v||0)>best){ best=v; $('#siBest').textContent=best; } });
   function lightUp(i,ms=460){ const p=pads[i]; p.classList.add('lit'); blip(tones[i],ms/1000*.9,'triangle',.11);
     setTimeout(()=>p.classList.remove('lit'),ms-70); }
   function show(){ playing=true; accept=false; $('#siSay').textContent='watch…';
@@ -1385,6 +1458,7 @@ makeWheel('wheelDate',DATES,'dateSay','spinDate',r=>{ $('#dateSay').textContent=
 (function(){
   const grid=$('#holes'); let score=0, time=30, live=false, tmr=null, spawn=null;
   let best=store.get('whackBest',0); $('#wBest').textContent=best;
+  SYNC.onRemote('whackBest', v=>{ if((v||0)>best){ best=v; $('#wBest').textContent=best; } });
   for(let i=0;i<9;i++){
     const b=document.createElement('button'); b.className='hole'; b.innerHTML='<span class="veg">🥕</span>';
     b.onpointerdown=()=>{
@@ -1420,6 +1494,7 @@ makeWheel('wheelDate',DATES,'dateSay','spinDate',r=>{ $('#dateSay').textContent=
 (function(){
   const sheet=$('#wrap-sheet');
   let popped=store.get('pops',0); $('#popCount').textContent=popped; stats.pops=popped; paintStats();
+  SYNC.onRemote('pops', v=>{ popped=v||0; $('#popCount').textContent=popped; stats.pops=popped; paintStats(); });
   function build(){
     sheet.innerHTML=''; const n=innerWidth<560?49:70;
     for(let i=0;i<n;i++){
@@ -1445,6 +1520,7 @@ makeWheel('wheelDate',DATES,'dateSay','spinDate',r=>{ $('#dateSay').textContent=
   const el=$('#boopBunny');
   let n=store.get('boops',0), combo=0, comboT=null;
   $('#boopCount').textContent=n; stats.boops=n; paintStats();
+  SYNC.onRemote('boops', v=>{ n=v||0; $('#boopCount').textContent=n; stats.boops=n; paintStats(); });
   const says=['boop!','bnuuy accepts','*nose wiggle*','that tickles','boop received 💖','hehe','again?','snoot has been booped','the bunny is pleased','ow (affectionate)'];
   const miles={10:'ten boops! certified booper 🏅',50:'fifty. the snoot is famous now.',100:'100 boops. this is your personality now 🐰',250:'250 boops. the bunny named a star after you.',500:'500 BOOPS. genuinely incredible.'};
   el.onpointerdown=()=>{
@@ -1461,6 +1537,7 @@ makeWheel('wheelDate',DATES,'dateSay','spinDate',r=>{ $('#dateSay').textContent=
 (function(){
   const el=$('#spinner'); let ang=0, vel=0, dragging=false, lastA=0, lastT=0, counted=0;
   let n=store.get('spins',0); $('#spinCount').textContent=n;
+  SYNC.onRemote('spins', v=>{ n=v||0; $('#spinCount').textContent=n; });
   const angleOf=e=>{ const r=el.getBoundingClientRect();
     return Math.atan2(e.clientY-(r.top+r.height/2),e.clientX-(r.left+r.width/2))*180/Math.PI; };
   el.addEventListener('pointerdown',e=>{dragging=true; el.setPointerCapture(e.pointerId); lastA=angleOf(e); lastT=performance.now(); vel=0;});
@@ -1580,6 +1657,8 @@ makeWheel('wheelDate',DATES,'dateSay','spinDate',r=>{ $('#dateSay').textContent=
   };
   $('#gReset').onclick=()=>{ if(!confirm('Start the garden over? All petals and helpers go away.')) return;
     g={p:0,own:{},total:g.total}; defs.forEach(d=>g.own[d.id]=0); save(); buildShop(); paint(); toast('fresh soil 🌱'); };
+  SYNC.onRemote('garden', v=>{ if(v){ g=Object.assign({p:0,own:{},total:0}, v);
+    defs.forEach(d=>{ if(g.own[d.id]==null) g.own[d.id]=0; }); buildShop(); paint(); } });
   buildShop(); paint();
   setInterval(()=>{ const ps=perSec(); if(ps){ g.p+=ps/10; g.total+=ps/10; paint(); } },100);
   setInterval(save,4000);
@@ -1588,10 +1667,12 @@ makeWheel('wheelDate',DATES,'dateSay','spinDate',r=>{ $('#dateSay').textContent=
 /* ================= BUNNY PET ================= */
 (function(){
   const el=$('#petBunny');
-  let p=store.get('pet',{hun:80,hap:80,ene:90,name:'',born:Date.now(),last:Date.now()});
-  const now=Date.now(), hrs=Math.max(0,(now-(p.last||now))/36e5);
-  p.hun=clamp((p.hun??80)-hrs*7,0,100); p.hap=clamp((p.hap??80)-hrs*5,0,100); p.ene=clamp((p.ene??90)+hrs*4,0,100);
-  p.last=now; if(!p.born) p.born=now;
+  function decay(obj){
+    const now=Date.now(), hrs=Math.max(0,(now-(obj.last||now))/36e5);
+    obj.hun=clamp((obj.hun??80)-hrs*7,0,100); obj.hap=clamp((obj.hap??80)-hrs*5,0,100); obj.ene=clamp((obj.ene??90)+hrs*4,0,100);
+    obj.last=now; if(!obj.born) obj.born=now; return obj;
+  }
+  let p=decay(store.get('pet',{hun:80,hap:80,ene:90,name:'',born:Date.now(),last:Date.now()}));
   $('#petName').value=p.name||'';
   function save(){ p.last=Date.now(); store.set('pet',p); }
   function mood(){
@@ -1609,6 +1690,7 @@ makeWheel('wheelDate',DATES,'dateSay','spinDate',r=>{ $('#dateSay').textContent=
     $('#petAge').textContent=`${nm} has been living here for ${days===0?'less than a day':days+' day'+(days===1?'':'s')}.`;
   }
   REPAINT.push(paint);
+  SYNC.onRemote('pet', v=>{ if(v && (v.last||0)>(p.last||0)){ p=decay(Object.assign({},v)); $('#petName').value=p.name||''; paint(); } });
   function hop(){ el.classList.remove('hop'); void el.offsetWidth; el.classList.add('hop'); }
   $('#petName').oninput=e=>{ p.name=e.target.value.trim(); save(); paint(); };
   $('#feedBtn').onclick=()=>{ p.hun=clamp(p.hun+22,0,100); p.hap=clamp(p.hap+4,0,100); p.ene=clamp(p.ene+3,0,100);
