@@ -755,8 +755,8 @@ const firebaseConfig = {
   appId: "1:848490841328:web:ac5eb3e12a6fafa6baae35",
   measurementId: "G-DSLKRVVVMH"
 };
-const SYNC_ON = !!(FIREBASE_CONFIG.apiKey && FIREBASE_CONFIG.databaseURL
-  && !FIREBASE_CONFIG.apiKey.startsWith('YOUR_') && !FIREBASE_CONFIG.databaseURL.startsWith('https://YOUR_'));
+const SYNC_ON = !!(firebaseConfig.apiKey && firebaseConfig.databaseURL
+  && !firebaseConfig.apiKey.startsWith('YOUR_') && !firebaseConfig.databaseURL.startsWith('https://YOUR_'));
 // keys that represent "your shared world" — everything else (sound, theme, which
 // tab is open, day streak/visit count) stays local to each device on purpose
 const SHARED_KEYS=['pet','garden','stats','pops','boops','spins','hugs','look',
@@ -769,7 +769,7 @@ if(SYNC_ON){
         import('https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js'),
         import('https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js')
       ]);
-      const app=initializeApp(FIREBASE_CONFIG), dbRef=ref(getDatabase(app),'couple');
+      const app=initializeApp(firebaseConfig), dbRef=ref(getDatabase(app),'couple');
       const sn=$('#syncNote'); if(sn) sn.textContent='🔗 synced across devices';
       SYNC._push=(k,v)=>{ try{ update(dbRef,{[k]:v===undefined?null:v}); }catch(e){} };
       onValue(dbRef, snap=>{
