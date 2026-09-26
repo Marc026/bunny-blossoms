@@ -6,6 +6,9 @@
 <title>Bunny &amp; Blossoms · for Chloe</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#F58AB4">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='%23FFE9F1'/%3E%3Cellipse cx='74' cy='55' rx='16' ry='40' fill='%23fff' stroke='%23D98CAF' stroke-width='5'/%3E%3Cellipse cx='126' cy='55' rx='16' ry='40' fill='%23fff' stroke='%23D98CAF' stroke-width='5'/%3E%3Ccircle cx='100' cy='120' r='58' fill='%23fff' stroke='%23D98CAF' stroke-width='5'/%3E%3Ccircle cx='83' cy='112' r='9' fill='%233B2A33'/%3E%3Ccircle cx='117' cy='112' r='9' fill='%233B2A33'/%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ================= tokens ================= */
@@ -286,6 +289,127 @@ input[type=range]{accent-color:var(--rose); width:100%}
   transition:opacity .25s,transform .25s; pointer-events:none; max-width:86vw; text-align:center}
 .toast.show{opacity:1; transform:translateX(-50%) translateY(-6px)}
 footer{text-align:center; color:var(--ink-2); font-size:13px; margin-top:34px; font-weight:700; line-height:1.7}
+
+/* theme skins (independent of light/dark) */
+:root[data-skin="lavender"]{ --rose:#B79CE8; --rose-d:#8F6BD6; --rose-l:#E3D6FA; --bg-2:#F1E9FC; --butter:#FDE9C8; --lilac:#D9C6F5; }
+:root[data-skin="mint"]{ --rose:#5FB79C; --rose-d:#3C8E76; --rose-l:#C9EEE0; --bg-2:#E3F6EE; --butter:#FFEFC2; --lilac:#CDE9DC; }
+:root[data-skin="sunset"]{ --rose:#F5875B; --rose-d:#D95F32; --rose-l:#FFD3B8; --bg-2:#FFEADD; --butter:#FFDD9E; --lilac:#F3B6A6; }
+
+/* calm mode */
+:root[data-calm="1"] *,:root[data-calm="1"] *::before,:root[data-calm="1"] *::after{
+  animation-duration:.001s!important; animation-iteration-count:1!important; transition-duration:.001s!important; }
+
+/* settings modal */
+.modalBack{position:fixed; inset:0; background:rgba(40,20,30,.42); backdrop-filter:blur(2px); z-index:20; display:none; place-items:center; padding:18px}
+.modalBack.on{display:grid}
+.modalCard{background:var(--card); border:2px solid var(--line-2); border-radius:var(--r); padding:22px; max-width:420px; width:100%; box-shadow:var(--shadow); max-height:86vh; overflow-y:auto; position:relative}
+.modalCard h2{margin:0 0 14px}
+.modalClose{position:absolute; top:14px; right:14px}
+.settRow{margin-bottom:18px}
+.settRow .tiny{margin-bottom:8px; display:block}
+.skinSwatch{width:34px; height:34px; border-radius:50%; border:3px solid var(--line); cursor:pointer}
+.skinSwatch.on{border-color:var(--ink); box-shadow:0 0 0 4px rgba(245,138,180,.22)}
+
+/* about us */
+.tlEntry{display:flex; gap:14px; padding:12px 0; border-bottom:2px dashed var(--line-2)}
+.tlEntry:last-child{border-bottom:none}
+.tlDate{flex:0 0 auto; width:74px; font-weight:800; color:var(--rose-d); font-size:13px; text-align:center; padding-top:2px}
+.tlBody{flex:1}
+.tlBody b{display:block; font-family:"Baloo 2",sans-serif; font-size:16px}
+.tlBody p{margin:2px 0 0; color:var(--ink-2); font-size:14px}
+.tlDel{margin-left:auto; background:none; border:none; color:var(--ink-2); cursor:pointer; font-size:16px; flex:0 0 auto}
+.miniForm{display:grid; gap:8px; grid-template-columns:1fr 1fr; margin-top:10px}
+.miniForm input,.miniForm textarea{font-family:inherit; font-size:14px; color:var(--ink); background:var(--card-2);
+  border:2px solid var(--line); border-radius:10px; padding:8px 10px; outline:none; resize:vertical}
+.miniForm input:focus,.miniForm textarea:focus{border-color:var(--rose)}
+.miniForm .full{grid-column:1/-1}
+.cdCard{background:var(--card-2); border:2px solid var(--line-2); border-radius:16px; padding:14px; text-align:center}
+.cdCard b{display:block; font-family:"Baloo 2",sans-serif; font-size:26px; color:var(--rose-d)}
+.cdCard .del{margin-top:6px}
+.songCard{display:flex; gap:12px; align-items:center; background:var(--card-2); border:2px solid var(--line-2);
+  border-radius:16px; padding:12px 14px; margin-bottom:10px}
+.songCard b{display:block; font-family:"Baloo 2",sans-serif}
+.songCard small{color:var(--ink-2)}
+.songCard a{margin-left:auto; flex:0 0 auto}
+
+/* achievements */
+.badgeGrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:12px}
+.badge{background:var(--card-2); border:2px solid var(--line-2); border-radius:16px; padding:14px; text-align:center; opacity:.4; filter:grayscale(1)}
+.badge.got{opacity:1; filter:none; border-color:var(--rose); box-shadow:0 6px 14px rgba(245,138,180,.2)}
+.badge .ic{font-size:30px}
+.badge b{display:block; font-family:"Baloo 2",sans-serif; font-size:13.5px; margin-top:6px}
+.badge small{color:var(--ink-2); font-size:11.5px}
+
+/* trivia */
+.triQ{font-family:"Baloo 2",sans-serif; font-size:18px; margin-bottom:14px}
+.triOpt{display:block; width:100%; text-align:left; background:var(--card-2); border:2px solid var(--line);
+  border-radius:14px; padding:12px 14px; margin-bottom:8px; cursor:pointer; font-family:inherit; font-size:15px; color:var(--ink)}
+.triOpt:hover{border-color:var(--rose)}
+.triOpt.right{background:var(--mint); border-color:#5FB79C}
+.triOpt.wrong{background:var(--rose-l); border-color:var(--rose-d)}
+.triEdit{background:var(--card-2); border:2px solid var(--line-2); border-radius:14px; padding:12px; margin-bottom:10px}
+.triEdit input{width:100%; margin-bottom:6px}
+
+/* flappy bunny */
+#flapField{position:relative; height:280px; border-radius:18px; overflow:hidden; touch-action:none; cursor:pointer;
+  background:linear-gradient(180deg,#FFF0F6,var(--card-2)); border:2px solid var(--line-2)}
+#flapBun{position:absolute; left:60px; width:46px; top:100px}
+.pipe{position:absolute; width:52px; background:var(--mint); border:3px solid #5FB79C; border-radius:8px}
+
+/* jigsaw */
+#jigWrap{display:grid; grid-template-columns:repeat(3,1fr); gap:4px; width:100%; max-width:340px; aspect-ratio:1; margin-inline:auto}
+.jigCell{border-radius:6px; cursor:pointer; border:2px solid var(--card); background-size:300% 300%; transition:outline .15s}
+.jigCell.sel{outline:3px solid var(--rose-d)}
+
+/* coloring book */
+.paletteRow{display:flex; gap:8px; flex-wrap:wrap; margin:10px 0}
+.swat{width:32px; height:32px; border-radius:50%; border:3px solid var(--line); cursor:pointer}
+.swat.on{border-color:var(--ink); transform:scale(1.1)}
+#colorSVG path,#colorSVG circle,#colorSVG ellipse{cursor:pointer; stroke:#6B4C5A; stroke-width:2}
+
+/* wordle */
+#wdGrid{display:grid; grid-template-rows:repeat(6,1fr); gap:6px; max-width:280px; margin:0 auto 14px}
+.wdRow{display:grid; grid-template-columns:repeat(5,1fr); gap:6px}
+.wdCell{aspect-ratio:1; border:2px solid var(--line); border-radius:8px; display:grid; place-items:center;
+  font-family:"Baloo 2",sans-serif; font-weight:800; font-size:20px; text-transform:uppercase; background:var(--card-2)}
+.wdCell.hit{background:#79BCA8; border-color:#5FA98C; color:#fff}
+.wdCell.near{background:var(--butter); border-color:#E9C35F}
+.wdCell.miss{background:var(--line-2); color:var(--ink-2)}
+#wdKeys{display:flex; flex-wrap:wrap; gap:5px; justify-content:center; max-width:360px; margin-inline:auto}
+.wdKey{border-radius:8px; background:var(--card-2); border:2px solid var(--line); font-family:inherit;
+  font-weight:800; font-size:13px; padding:10px 8px; cursor:pointer; min-width:28px; text-transform:uppercase}
+.wdKey.wide{padding:10px 12px}
+.wdKey.hit{background:#79BCA8; color:#fff; border-color:#5FA98C}
+.wdKey.near{background:var(--butter); border-color:#E9C35F}
+.wdKey.miss{background:var(--line-2); color:var(--ink-2)}
+
+/* tic tac toe */
+#tttGrid{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; max-width:240px; margin-inline:auto}
+.tttCell{aspect-ratio:1; border-radius:14px; border:2px solid var(--line); background:var(--card-2); cursor:pointer;
+  font-size:34px; display:grid; place-items:center; font-family:"Baloo 2",sans-serif}
+.tttCell:disabled{cursor:default}
+
+/* snow globe */
+#globeWrap{width:220px; height:220px; margin-inline:auto; border-radius:50%; overflow:hidden; position:relative;
+  border:6px solid #fff; box-shadow:0 10px 26px rgba(222,83,144,.25), inset 0 0 20px rgba(255,255,255,.5);
+  background:linear-gradient(180deg,#FFF0F6,var(--card-2)); touch-action:none; cursor:grab}
+#globeWrap canvas{width:100%; height:100%; display:block}
+.globeBase{width:120px; height:26px; background:linear-gradient(180deg,var(--rose-d),var(--rose)); margin:-8px auto 0; border-radius:0 0 14px 14px}
+
+/* bubble tea */
+#bteaWrap{display:flex; flex-direction:column; align-items:center; gap:10px}
+#cupSVG{width:150px}
+.teaBtns{display:flex; gap:8px; flex-wrap:wrap; justify-content:center}
+
+/* paint splatter */
+#paintCanvas{width:100%; height:260px; border-radius:18px; border:2px solid var(--line-2); touch-action:none; cursor:crosshair; display:block}
+
+/* soundboard */
+.sbGrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:10px}
+.sbBtn{background:var(--card-2); border:2px solid var(--line); border-radius:16px; padding:16px 8px; cursor:pointer;
+  font-family:inherit; font-weight:700; font-size:13px; color:var(--ink); transition:transform .12s}
+.sbBtn:active{transform:scale(.94)}
+.sbBtn .ic{font-size:26px; display:block; margin-bottom:4px}
 </style>
 </head>
 <body>
@@ -299,6 +423,7 @@ footer{text-align:center; color:var(--ink-2); font-size:13px; margin-top:34px; f
       <p class="sub">Chloe's corner of the internet 🌸 built by Marc</p>
     </div>
     <div class="top-actions">
+      <button class="icon-btn" id="settBtn" title="Settings">⚙️</button>
       <button class="icon-btn" id="soundBtn" title="Sound on/off">🔔</button>
       <button class="icon-btn" id="themeBtn" title="Light / dark">🌙</button>
     </div>
@@ -319,6 +444,9 @@ footer{text-align:center; color:var(--ink-2); font-size:13px; margin-top:34px; f
       <button class="tab" data-p="garden">🌱 Garden</button>
       <button class="tab" data-p="pet">🐾 Bunny Pet</button>
       <button class="tab" data-p="wheels">🎡 Wheels</button>
+      <button class="tab" data-p="about">💕 About Us</button>
+      <button class="tab" data-p="achieve">🏆 Achievements</button>
+      <button class="tab" data-p="trivia">❓ Trivia</button>
       <button class="tab" data-p="notes">💌 Sweet Nothings</button>
     </nav>
     <button class="tabArrow right pulse" id="tabNext" aria-label="scroll tabs right">›</button>
@@ -478,6 +606,67 @@ footer{text-align:center; color:var(--ink-2); font-size:13px; margin-top:34px; f
         <div id="holes"></div>
       </div>
     </div>
+
+    <div class="card" style="margin-top:18px">
+      <h2>Flappy Bunny 🐰🌸</h2>
+      <p class="hint">Tap or press space to flap. Thread the gaps between the blossom pipes.</p>
+      <div class="row" style="margin-bottom:12px">
+        <span class="pill">score: <b id="flapScore">0</b></span>
+        <span class="pill">⭐ best: <b id="flapBest">0</b></span>
+        <button class="btn" id="flapStart">Start flying</button>
+      </div>
+      <div id="flapField">
+        <div id="flapBun"></div>
+        <div class="arena-msg" id="flapMsg">
+          <div style="font-size:22px" class="display">Ready to fly? 🌸</div>
+          <div class="tiny">Tap anywhere or press space to flap.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid g2" style="margin-top:18px">
+      <div class="card">
+        <h2>Bunny Jigsaw 🧩</h2>
+        <p class="hint">Tap two pieces to swap them. Uses a built-in scene, or your latest Photobooth shot if you've taken one.</p>
+        <div class="row" style="margin-bottom:10px">
+          <button class="btn ghost" id="jigShuffle">Shuffle</button>
+          <button class="btn ghost" id="jigUsePhoto" style="display:none">Use my Photobooth shot</button>
+        </div>
+        <div id="jigWrap"></div>
+        <p class="boop-say" id="jigSay" style="margin-top:10px">&nbsp;</p>
+      </div>
+      <div class="card">
+        <h2>Tic-Tac-Toe vs Bunny ❌⭕</h2>
+        <p class="hint">You're X. The bunny plays fair — mostly.</p>
+        <div id="tttGrid"></div>
+        <p class="boop-say" id="tttSay" style="margin-top:12px">Your move.</p>
+        <div class="row" style="justify-content:center; margin-top:6px">
+          <button class="btn ghost" id="tttReset">New game</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid g2" style="margin-top:18px">
+      <div class="card">
+        <h2>Coloring Book 🎨</h2>
+        <p class="hint">Pick a color, then tap a shape to fill it.</p>
+        <div class="paletteRow" id="colorPalette"></div>
+        <svg id="colorSVG" viewBox="0 0 200 200" style="width:100%; max-width:260px; display:block; margin-inline:auto"></svg>
+        <div class="row" style="justify-content:center; margin-top:10px">
+          <button class="btn ghost" id="colorReset">Clear colors</button>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Petal Words 🌷</h2>
+        <p class="hint">Wordle, but cuter. Five letters, six guesses.</p>
+        <div id="wdGrid"></div>
+        <div id="wdKeys"></div>
+        <p class="boop-say" id="wdSay" style="margin-top:10px">&nbsp;</p>
+        <div class="row" style="justify-content:center; margin-top:8px">
+          <button class="btn ghost" id="wdNew">New word</button>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- ============ FIDGET ============ -->
@@ -527,6 +716,47 @@ footer{text-align:center; color:var(--ink-2); font-size:13px; margin-top:34px; f
         <button class="btn ghost" id="zStone">Drop a stone 🪨</button>
         <button class="btn ghost" id="zPetal">Scatter petals 🌸</button>
         <button class="btn ghost" id="zClear">Smooth the sand</button>
+      </div>
+    </div>
+
+    <div class="grid g2" style="margin-top:18px">
+      <div class="card">
+        <h2>Snow Globe 🌨️</h2>
+        <p class="hint center">Drag to shake. Petals settle when you let go.</p>
+        <div id="globeWrap"><canvas id="globeCanvas"></canvas></div>
+        <div class="globeBase"></div>
+      </div>
+      <div class="card">
+        <h2>Bubble Tea Maker 🧋</h2>
+        <p class="hint center">Build a cup, one layer at a time.</p>
+        <div id="bteaWrap">
+          <svg id="cupSVG" viewBox="0 0 120 160"></svg>
+          <div class="teaBtns">
+            <button class="btn ghost" id="teaBoba">+ Boba</button>
+            <button class="btn ghost" id="teaMilk">+ Milk</button>
+            <button class="btn ghost" id="teaTea">+ Tea</button>
+            <button class="btn ghost" id="teaShake">Shake 🌀</button>
+            <button class="btn ghost" id="teaReset">New cup</button>
+          </div>
+          <p class="tiny" id="teaCount">cups made: 0</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid g2" style="margin-top:18px">
+      <div class="card">
+        <h2>Paint Splatter 🎨</h2>
+        <p class="hint">Tap or drag to splash pastel paint. Save it if it turns into something good.</p>
+        <canvas id="paintCanvas"></canvas>
+        <div class="row" style="margin-top:12px">
+          <button class="btn ghost" id="paintClear">Clear canvas</button>
+          <button class="btn ghost" id="paintSave">Save as image 💾</button>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Soundboard 🔊</h2>
+        <p class="hint">A little grid of noises for absolutely no reason.</p>
+        <div class="sbGrid" id="sbGrid"></div>
       </div>
     </div>
   </section>
@@ -668,6 +898,69 @@ footer{text-align:center; color:var(--ink-2); font-size:13px; margin-top:34px; f
     </div>
   </section>
 
+  <!-- ============ ABOUT US ============ -->
+  <section class="page" id="p-about">
+    <div class="card">
+      <h2>Us Timeline 📖</h2>
+      <p class="hint">Add the moments worth keeping. Sorted by date automatically.</p>
+      <div id="tlList"></div>
+      <div class="miniForm">
+        <input id="tlDateIn" type="date">
+        <input id="tlTitleIn" placeholder="What happened">
+        <textarea id="tlNoteIn" class="full" placeholder="A line about it (optional)" rows="2"></textarea>
+      </div>
+      <div class="row" style="margin-top:10px"><button class="btn" id="tlAdd">Add to timeline 📌</button></div>
+    </div>
+
+    <div class="card" style="margin-top:18px">
+      <h2>Countdown ⏳</h2>
+      <p class="hint">Anniversary, her birthday, a trip — anything worth counting down to.</p>
+      <div class="grid g3" id="cdList"></div>
+      <div class="miniForm">
+        <input id="cdLabelIn" placeholder="What's coming up">
+        <input id="cdDateIn" type="date">
+      </div>
+      <div class="row" style="margin-top:10px"><button class="btn" id="cdAdd">Add countdown ⏳</button></div>
+    </div>
+
+    <div class="card" style="margin-top:18px">
+      <h2>Our Songs 🎧</h2>
+      <p class="hint">The soundtrack, with a note on why each one made the cut.</p>
+      <div id="songList"></div>
+      <div class="miniForm">
+        <input id="sgTitleIn" placeholder="Song title">
+        <input id="sgArtistIn" placeholder="Artist">
+        <input id="sgUrlIn" placeholder="Link (Spotify/Apple Music, optional)">
+        <input id="sgWhyIn" placeholder="Why this one">
+      </div>
+      <div class="row" style="margin-top:10px"><button class="btn" id="sgAdd">Add song 🎵</button></div>
+    </div>
+  </section>
+
+  <!-- ============ ACHIEVEMENTS ============ -->
+  <section class="page" id="p-achieve">
+    <div class="card">
+      <h2>Achievements 🏆</h2>
+      <p class="hint">Unlocked together — badges pull straight from everything you both already do on this site.</p>
+      <div class="badgeGrid" id="badgeGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ TRIVIA ============ -->
+  <section class="page" id="p-trivia">
+    <div class="card">
+      <h2>Trivia ❓</h2>
+      <p class="hint" id="triHint">Marc writes the questions, Chloe answers. Fully custom, not generic.</p>
+      <div id="triPlay"></div>
+      <div class="row" style="margin-top:12px">
+        <button class="btn" id="triStart">Play 🎯</button>
+        <button class="btn ghost" id="triEditToggle">Edit questions ✏️</button>
+      </div>
+      <p class="tiny" style="margin-top:10px">best score: <b id="triBest">0</b>/<span id="triTotal">0</span></p>
+      <div id="triEditor" style="display:none; margin-top:14px"></div>
+    </div>
+  </section>
+
   <!-- ============ NOTES ============ -->
   <section class="page" id="p-notes">
     <div class="card">
@@ -705,6 +998,38 @@ footer{text-align:center; color:var(--ink-2); font-size:13px; margin-top:34px; f
     for <b>Chloe</b>, who is the reason this website is pink
     <p class="tiny" id="syncNote" style="margin-top:6px"></p>
   </footer>
+</div>
+
+<div class="modalBack" id="settModal">
+  <div class="modalCard">
+    <button class="icon-btn modalClose" id="settClose">✕</button>
+    <h2>Settings ⚙️</h2>
+
+    <div class="settRow">
+      <span class="tiny">Theme skin</span>
+      <div class="row" id="skinRow"></div>
+    </div>
+
+    <div class="settRow">
+      <span class="tiny">Calm mode — turns off all motion and animation</span>
+      <div class="sw" id="calmSw"><i></i></div>
+    </div>
+
+    <div class="settRow">
+      <span class="tiny">Backup your progress</span>
+      <div class="row">
+        <button class="btn ghost" id="backupBtn">Download backup 💾</button>
+        <label class="btn ghost" for="restoreIn" style="display:inline-block">Restore from file</label>
+        <input id="restoreIn" type="file" accept="application/json" style="display:none">
+      </div>
+      <p class="tiny" style="margin-top:8px">Saves the pet, garden, scores, timeline and everything else on this device to one file — handy since a self-hosted site has no account to log into.</p>
+    </div>
+
+    <div class="settRow" style="margin-bottom:0">
+      <span class="tiny">Add to your home screen</span>
+      <p class="tiny" style="margin-top:2px">On your phone, use your browser's "Add to Home Screen" (Safari: Share → Add to Home Screen. Chrome: menu → Install app). It'll open full-screen like a real app from then on.</p>
+    </div>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -745,7 +1070,7 @@ const store={
    Leave the placeholders as-is and the site just runs local-only,
    exactly like before — nothing breaks either way.
 */
-const firebaseConfig = {
+const FIREBASE_CONFIG = {
   apiKey: "AIzaSyA4NWmhQgNdU3BedUMC3YdlExOeddnNSnk",
   authDomain: "chlo-8ba74.firebaseapp.com",
   databaseURL: "https://chlo-8ba74-default-rtdb.firebaseio.com",
@@ -755,12 +1080,13 @@ const firebaseConfig = {
   appId: "1:848490841328:web:ac5eb3e12a6fafa6baae35",
   measurementId: "G-DSLKRVVVMH"
 };
-const SYNC_ON = !!(firebaseConfig.apiKey && firebaseConfig.databaseURL
-  && !firebaseConfig.apiKey.startsWith('YOUR_') && !firebaseConfig.databaseURL.startsWith('https://YOUR_'));
+const SYNC_ON = !!(FIREBASE_CONFIG.apiKey && FIREBASE_CONFIG.databaseURL
+  && !FIREBASE_CONFIG.apiKey.startsWith('YOUR_') && !FIREBASE_CONFIG.databaseURL.startsWith('https://YOUR_'));
 // keys that represent "your shared world" — everything else (sound, theme, which
 // tab is open, day streak/visit count) stays local to each device on purpose
 const SHARED_KEYS=['pet','garden','stats','pops','boops','spins','hugs','look',
-  'catchBest','heartBest','simonBest','whackBest','hopBest','slotWins','slotSpins'];
+  'catchBest','heartBest','simonBest','whackBest','hopBest','slotWins','slotSpins',
+  'timeline','countdowns','songs','trivia','triviaBest','achievements','notesPulled','wheelSpins','flapBest'];
 const SYNC={ listeners:{}, onRemote(k,fn){ (SYNC.listeners[k]=SYNC.listeners[k]||[]).push(fn); } };
 if(SYNC_ON){
   (async()=>{
@@ -769,7 +1095,7 @@ if(SYNC_ON){
         import('https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js'),
         import('https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js')
       ]);
-      const app=initializeApp(firebaseConfig), dbRef=ref(getDatabase(app),'couple');
+      const app=initializeApp(FIREBASE_CONFIG), dbRef=ref(getDatabase(app),'couple');
       const sn=$('#syncNote'); if(sn) sn.textContent='🔗 synced across devices';
       SYNC._push=(k,v)=>{ try{ update(dbRef,{[k]:v===undefined?null:v}); }catch(e){} };
       onValue(dbRef, snap=>{
@@ -1087,7 +1413,8 @@ function nextNote(){ if(!bag.length) bag=[...noteTpl].sort(()=>Math.random()-.5)
   $('[data-daily]').textContent=noteTpl[seed%noteTpl.length](HER);
 })();
 $('#noteBtn').onclick=()=>{ const c=$('[data-jar]'); c.classList.remove('pop-in'); void c.offsetWidth;
-  c.textContent=nextNote(); c.classList.add('pop-in'); sfx.good(); };
+  c.textContent=nextNote(); c.classList.add('pop-in'); sfx.good();
+  const np=store.get('notesPulled',0)+1; store.set('notesPulled',np); };
 
 const fortunes=[
   n=>`A snack will find ${n} within the hour. 🥨`,
@@ -1177,6 +1504,7 @@ function makeWheel(canvasId, items, sayId, btnId, onResult){
         spinning=false;
         let ang=(-Math.PI/2-rot)%(Math.PI*2); if(ang<0) ang+=Math.PI*2;
         const idx=Math.floor(ang/seg)%items.length;
+        const ws=store.get('wheelSpins',0)+1; store.set('wheelSpins',ws);
         onResult(items[idx]); sfx.win();
       }
     })(t0);
@@ -1786,7 +2114,8 @@ makeWheel('wheelDate',DATES,'dateSay','spinDate',r=>{ $('#dateSay').textContent=
     return cv.toDataURL('image/jpeg',.92);
   }
   function addShot(url){ if(!url) return; shots.push(url); if(shots.length>8) shots.shift();
-    if(sel.length<4) sel.push(shots.length-1); paintShots(); }
+    if(sel.length<4) sel.push(shots.length-1); paintShots();
+    if(window.__jigOfferPhoto) window.__jigOfferPhoto(url); }
   function paintShots(){
     const box=$('#shots');
     box.innerHTML=shots.map((u,i)=>{ const k=sel.indexOf(i);
@@ -1888,6 +2217,526 @@ makeWheel('wheelDate',DATES,'dateSay','spinDate',r=>{ $('#dateSay').textContent=
     }
   };
   paintShots();
+})();
+
+/* ================= SETTINGS: theme skins, calm mode, backup/restore ================= */
+(function(){
+  const modal=$('#settModal');
+  $('#settBtn').onclick=()=>modal.classList.add('on');
+  $('#settClose').onclick=()=>modal.classList.remove('on');
+  modal.addEventListener('click',e=>{ if(e.target===modal) modal.classList.remove('on'); });
+
+  const SKINS=[{id:'blossom',label:'Blossom',col:'#F58AB4'},{id:'lavender',label:'Lavender',col:'#B79CE8'},
+    {id:'mint',label:'Mint',col:'#5FB79C'},{id:'sunset',label:'Sunset',col:'#F5875B'}];
+  let skin=store.get('skin','blossom');
+  if(skin!=='blossom') document.documentElement.setAttribute('data-skin',skin);
+  function paintSkins(){
+    $('#skinRow').innerHTML=SKINS.map(s=>`<div class="skinSwatch${skin===s.id?' on':''}" data-s="${s.id}" style="background:${s.col}" title="${s.label}"></div>`).join('');
+    $$('.skinSwatch',$('#skinRow')).forEach(el=>el.onclick=()=>{
+      skin=el.dataset.s; store.set('skin',skin);
+      if(skin==='blossom') document.documentElement.removeAttribute('data-skin'); else document.documentElement.setAttribute('data-skin',skin);
+      paintSkins(); sfx.click();
+    });
+  }
+  paintSkins();
+
+  let calm=store.get('calm',false);
+  if(calm) document.documentElement.setAttribute('data-calm','1');
+  const calmSw=$('#calmSw'); calmSw.classList.toggle('on',calm);
+  calmSw.onclick=()=>{
+    calm=!calm; store.set('calm',calm);
+    if(calm) document.documentElement.setAttribute('data-calm','1'); else document.documentElement.removeAttribute('data-calm');
+    calmSw.classList.toggle('on',calm); sfx.click();
+  };
+
+  $('#backupBtn').onclick=()=>{
+    const data={}; for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k&&k.startsWith('bb_')) data[k]=localStorage.getItem(k); }
+    const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+    a.download=`bunny-blossoms-backup-${new Date().toISOString().slice(0,10)}.json`;
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+    toast('backup downloaded 💾');
+  };
+  $('#restoreIn').onchange=e=>{
+    const f=e.target.files[0]; if(!f) return;
+    const fr=new FileReader();
+    fr.onload=()=>{
+      try{
+        const data=JSON.parse(fr.result);
+        Object.keys(data).forEach(k=>{ if(k.startsWith('bb_')){ try{ store.set(k.slice(3), JSON.parse(data[k])); }catch(e){} } });
+        toast('restored — reloading…'); setTimeout(()=>location.reload(),900);
+      }catch(err){ toast('that file didn\u2019t look right 🌸'); }
+    };
+    fr.readAsText(f); e.target.value='';
+  };
+})();
+
+/* ================= ABOUT US: timeline ================= */
+(function(){
+  let tl=store.get('timeline',[]);
+  function render(){
+    const list=$('#tlList');
+    if(!tl.length){ list.innerHTML='<p class="tiny">No memories yet — add your first below 🌸</p>'; return; }
+    const sorted=[...tl].sort((a,b)=>a.date.localeCompare(b.date));
+    list.innerHTML=sorted.map(e=>{
+      const d=new Date(e.date+'T00:00:00');
+      const ds=isNaN(d)?e.date:d.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'});
+      return `<div class="tlEntry"><div class="tlDate">${ds}</div><div class="tlBody"><b>${e.title}</b>${e.note?`<p>${e.note}</p>`:''}</div><button class="tlDel" data-id="${e.id}">✕</button></div>`;
+    }).join('');
+    $$('.tlDel',list).forEach(b=>b.onclick=()=>{ tl=tl.filter(e=>e.id!==b.dataset.id); save(); render(); });
+  }
+  function save(){ store.set('timeline',tl); }
+  $('#tlAdd').onclick=()=>{
+    const d=$('#tlDateIn').value, t=$('#tlTitleIn').value.trim(), n=$('#tlNoteIn').value.trim();
+    if(!d||!t){ toast('add a date and a title 🌸'); return; }
+    tl.push({id:'t'+Date.now(),date:d,title:t,note:n}); save(); render(); sfx.good();
+    $('#tlTitleIn').value=''; $('#tlNoteIn').value='';
+  };
+  SYNC.onRemote('timeline', v=>{ if(Array.isArray(v)){ tl=v; render(); } });
+  render();
+})();
+
+/* ================= ABOUT US: countdown ================= */
+(function(){
+  let cds=store.get('countdowns',[]);
+  function render(){
+    const list=$('#cdList');
+    if(!cds.length){ list.innerHTML='<p class="tiny">No countdowns yet — add one below ⏳</p>'; return; }
+    list.innerHTML=cds.map(c=>{
+      const days=Math.ceil((new Date(c.date+'T00:00:00')-Date.now())/864e5);
+      const txt=days>0?`${days} day${days===1?'':'s'}`:days===0?'today! 🎉':`${Math.abs(days)}d ago`;
+      return `<div class="cdCard"><b>${txt}</b><small>${c.label}</small><div class="del"><button class="btn ghost" data-id="${c.id}" style="padding:6px 12px; font-size:12px">remove</button></div></div>`;
+    }).join('');
+    $$('.del button',list).forEach(b=>b.onclick=()=>{ cds=cds.filter(c=>c.id!==b.dataset.id); save(); render(); });
+  }
+  function save(){ store.set('countdowns',cds); }
+  $('#cdAdd').onclick=()=>{
+    const l=$('#cdLabelIn').value.trim(), d=$('#cdDateIn').value;
+    if(!l||!d){ toast('add a label and a date ⏳'); return; }
+    cds.push({id:'c'+Date.now(),label:l,date:d}); save(); render(); sfx.good();
+    $('#cdLabelIn').value='';
+  };
+  SYNC.onRemote('countdowns', v=>{ if(Array.isArray(v)){ cds=v; render(); } });
+  render();
+  setInterval(render,3600000);
+})();
+
+/* ================= ABOUT US: songs ================= */
+(function(){
+  let songs=store.get('songs',[]);
+  function render(){
+    const list=$('#songList');
+    if(!songs.length){ list.innerHTML='<p class="tiny">No songs yet — add your first below 🎵</p>'; return; }
+    list.innerHTML=songs.map(s=>`<div class="songCard"><div><b>${s.title}</b><small>${s.artist||''}${s.why?' — '+s.why:''}</small></div>
+      ${s.url?`<a class="btn ghost" href="${s.url}" target="_blank" rel="noopener">▶ open</a>`:''}
+      <button class="tlDel" data-id="${s.id}">✕</button></div>`).join('');
+    $$('.tlDel',list).forEach(b=>b.onclick=()=>{ songs=songs.filter(s=>s.id!==b.dataset.id); save(); render(); });
+  }
+  function save(){ store.set('songs',songs); }
+  $('#sgAdd').onclick=()=>{
+    const t=$('#sgTitleIn').value.trim(), a=$('#sgArtistIn').value.trim(), u=$('#sgUrlIn').value.trim(), w=$('#sgWhyIn').value.trim();
+    if(!t){ toast('needs at least a title 🎵'); return; }
+    songs.push({id:'s'+Date.now(),title:t,artist:a,url:u,why:w}); save(); render(); sfx.good();
+    $('#sgTitleIn').value=''; $('#sgArtistIn').value=''; $('#sgUrlIn').value=''; $('#sgWhyIn').value='';
+  };
+  SYNC.onRemote('songs', v=>{ if(Array.isArray(v)){ songs=v; render(); } });
+  render();
+})();
+
+/* ================= ACHIEVEMENTS ================= */
+(function(){
+  const BADGES=[
+    {id:'firstBoop',ic:'👆',name:'First Boop',desc:'Boop the bunny once',check:()=>(store.get('boops',0)||0)>=1},
+    {id:'booper100',ic:'🏅',name:'Certified Booper',desc:'100 boops',check:()=>(store.get('boops',0)||0)>=100},
+    {id:'bubbleMenace',ic:'🫧',name:'Bubble Menace',desc:'Pop 200 bubbles',check:()=>(store.get('pops',0)||0)>=200},
+    {id:'greenThumb',ic:'🌸',name:'Green Thumb',desc:'Grow 1,000 petals',check:()=>((store.get('garden',{})||{}).total||0)>=1000},
+    {id:'gardenTycoon',ic:'🌳',name:'Garden Tycoon',desc:'Grow 20,000 petals',check:()=>((store.get('garden',{})||{}).total||0)>=20000},
+    {id:'bestFriend',ic:'🐰',name:"Bunny's Best Friend",desc:'25 pets & cuddles',check:()=>((store.get('stats',{})||{}).pets||0)>=25},
+    {id:'hugger',ic:'🤗',name:'Hug Enthusiast',desc:'Deliver 10 hugs',check:()=>(store.get('hugs',0)||0)>=10},
+    {id:'jackpot',ic:'🎰',name:'Jackpot',desc:'Hit a slots jackpot',check:()=>(store.get('slotWins',0)||0)>=1},
+    {id:'fashionista',ic:'🎀',name:'Fashionista',desc:'Change the outfit',check:()=>{const l=store.get('look',{})||{}; return (l.bow&&l.bow!=='rose')||(l.acc&&l.acc!=='bow');}},
+    {id:'champion',ic:'🏆',name:'Games Champion',desc:'A strong score in any game',
+      check:()=>(store.get('catchBest',0)||0)>=15||(store.get('heartBest',0)||0)>=20||(store.get('simonBest',0)||0)>=8||(store.get('whackBest',0)||0)>=20||(store.get('hopBest',0)||0)>=30||(store.get('flapBest',0)||0)>=10},
+    {id:'decisionMaker',ic:'🎡',name:'Decision Maker',desc:'Spin a wheel 5 times',check:()=>(store.get('wheelSpins',0)||0)>=5},
+    {id:'collector',ic:'💌',name:'Note Collector',desc:'Pull 15 notes',check:()=>(store.get('notesPulled',0)||0)>=15},
+    {id:'devoted',ic:'🔥',name:'Devoted',desc:'A 7-day streak',check:()=>((store.get('streak',{})||{}).n||0)>=7}
+  ];
+  const grid=$('#badgeGrid');
+  let unlocked=store.get('achievements',[]);
+  function render(){
+    grid.innerHTML=BADGES.map(b=>{ const got=unlocked.includes(b.id);
+      return `<div class="badge${got?' got':''}"><div class="ic">${got?b.ic:'❓'}</div><b>${b.name}</b><small>${b.desc}</small></div>`; }).join('');
+  }
+  function recompute(){
+    let changed=false;
+    BADGES.forEach(b=>{ if(!unlocked.includes(b.id) && b.check()){ unlocked=[...unlocked,b.id]; changed=true; } });
+    render();
+    if(changed){ store.set('achievements',unlocked);
+      if($('#p-achieve').classList.contains('on')){ sfx.win(); rain(['🏆','✨']); toast('badge unlocked! 🏆'); } }
+  }
+  SYNC.onRemote('achievements', v=>{ if(Array.isArray(v)){ v.forEach(id=>{ if(!unlocked.includes(id)) unlocked=[...unlocked,id]; }); render(); } });
+  ['stats','garden','hugs','look','slotWins','pops','boops','catchBest','heartBest','simonBest','whackBest','hopBest','flapBest','wheelSpins','notesPulled']
+    .forEach(k=>SYNC.onRemote(k,()=>recompute()));
+  const tab=document.querySelector('[data-p="achieve"]'); if(tab) tab.addEventListener('click',recompute);
+  recompute();
+})();
+
+/* ================= TRIVIA ================= */
+(function(){
+  const DEFAULT_Q=[
+    {q:'What color is basically this entire website?',opts:['Blue','Pink','Green','Purple'],correct:1},
+    {q:"What's the bunny's favorite snack, per this site?",opts:['Pizza','Carrots','Tacos','Ice cream'],correct:1}
+  ];
+  let qs=store.get('trivia',DEFAULT_Q);
+  let best=store.get('triviaBest',0);
+  $('#triBest').textContent=best; $('#triTotal').textContent=qs.length;
+  let idx=0, score=0, playing=false;
+
+  function renderEditor(){
+    const ed=$('#triEditor');
+    ed.innerHTML=qs.map((q,i)=>`<div class="triEdit" data-i="${i}">
+        <input data-f="q" placeholder="Question" value="${(q.q||'').replace(/"/g,'&quot;')}">
+        ${q.opts.map((o,j)=>`<input data-f="opt${j}" placeholder="Option ${j+1}" value="${(o||'').replace(/"/g,'&quot;')}">`).join('')}
+        <div class="row"><label class="tiny">Correct:
+          <select data-f="correct">${q.opts.map((_,j)=>`<option value="${j}" ${j===q.correct?'selected':''}>${j+1}</option>`).join('')}</select>
+        </label><button class="btn ghost" data-del="${i}">Delete</button></div></div>`).join('')
+      + `<button class="btn" id="triAddQ">Add question ➕</button>`;
+    $$('.triEdit',ed).forEach(card=>{
+      const i=+card.dataset.i;
+      $$('input,select',card).forEach(inp=>inp.onchange=()=>{
+        const f=inp.dataset.f;
+        if(f==='q') qs[i].q=inp.value; else if(f==='correct') qs[i].correct=+inp.value;
+        else qs[i].opts[+f.replace('opt','')]=inp.value;
+        save();
+      });
+      card.querySelector('[data-del]').onclick=()=>{ qs.splice(i,1); save(); renderEditor(); };
+    });
+    $('#triAddQ').onclick=()=>{ qs.push({q:'New question',opts:['A','B','C','D'],correct:0}); save(); renderEditor(); };
+  }
+  function save(){ store.set('trivia',qs); $('#triTotal').textContent=qs.length; }
+  $('#triEditToggle').onclick=()=>{ const ed=$('#triEditor'); const on=ed.style.display==='none';
+    ed.style.display=on?'block':'none'; if(on) renderEditor(); };
+  function playQ(){
+    if(idx>=qs.length){ playing=false;
+      if(score>best){ best=score; store.set('triviaBest',best); $('#triBest').textContent=best; }
+      $('#triPlay').innerHTML=`<div class="triQ">You got ${score} / ${qs.length} 🎉</div>`;
+      score===qs.length ? (sfx.win(),rain(['🏆','💖'])) : sfx.good();
+      return;
+    }
+    const q=qs[idx];
+    $('#triPlay').innerHTML=`<div class="triQ">${q.q}</div>`+q.opts.map((o,i)=>`<button class="triOpt" data-i="${i}">${o}</button>`).join('');
+    $$('.triOpt',$('#triPlay')).forEach(b=>b.onclick=()=>{
+      if(!playing) return; playing=false; const i=+b.dataset.i;
+      $$('.triOpt',$('#triPlay')).forEach((x,xi)=>{ if(xi===q.correct) x.classList.add('right'); else if(xi===i) x.classList.add('wrong'); });
+      if(i===q.correct){ score++; sfx.good(); } else sfx.bad();
+      setTimeout(()=>{ idx++; playing=true; playQ(); },900);
+    });
+  }
+  $('#triStart').onclick=()=>{ if(!qs.length){ toast('add a question first ✏️'); return; }
+    idx=0; score=0; playing=true; $('#triEditor').style.display='none'; playQ(); };
+  SYNC.onRemote('trivia', v=>{ if(Array.isArray(v)&&v.length){ qs=v; $('#triTotal').textContent=qs.length; if($('#triEditor').style.display!=='none') renderEditor(); } });
+  SYNC.onRemote('triviaBest', v=>{ if((v||0)>best){ best=v; $('#triBest').textContent=best; } });
+})();
+
+/* ================= GAME: Flappy Bunny ================= */
+(function(){
+  const field=$('#flapField'), bun=$('#flapBun'), msg=$('#flapMsg');
+  bun.innerHTML=bunny({blush:false});
+  let live=false, raf=null, y=100, vy=0, pipes=[], score=0, last=0, spawnAt=0;
+  let best=store.get('flapBest',0); $('#flapBest').textContent=best;
+  SYNC.onRemote('flapBest', v=>{ if((v||0)>best){ best=v; $('#flapBest').textContent=best; } });
+  const G=0.5, FLAP=-8.6, GAP=112;
+  function reset(){
+    pipes.forEach(p=>{p.top.remove();p.bot.remove();}); pipes=[];
+    y=100; vy=0; score=0; last=0; spawnAt=14; $('#flapScore').textContent=0;
+    bun.style.top=y+'px'; bun.style.transform='rotate(0deg)';
+  }
+  function flap(){ if(!live) return; vy=FLAP; blip(560,.08,'sine',.09,900); }
+  field.addEventListener('pointerdown',e=>{ e.preventDefault(); if(live) flap(); });
+  addEventListener('keydown',e=>{ if(e.code==='Space'&&$('#p-games').classList.contains('on')&&live){ e.preventDefault(); flap(); } });
+  function spawnPipe(){
+    const h=field.clientHeight, gapY=rnd(40,Math.max(60,h-40-GAP));
+    const top=document.createElement('div'); top.className='pipe';
+    const bot=document.createElement('div'); bot.className='pipe';
+    top.style.top='0px'; top.style.height=gapY+'px';
+    bot.style.top=(gapY+GAP)+'px'; bot.style.height=Math.max(10,h-gapY-GAP)+'px';
+    field.appendChild(top); field.appendChild(bot);
+    pipes.push({top,bot,x:field.clientWidth+10,gapY,passed:false});
+  }
+  function loop(ts){
+    const dt=last?clamp((ts-last)/16.67,.4,2.5):1; last=ts;
+    vy+=G*dt; y+=vy*dt;
+    const h=field.clientHeight;
+    if(y<0){y=0;vy=0;} if(y>h-30) return end();
+    bun.style.top=y+'px'; bun.style.transform=`rotate(${clamp(vy*3,-24,60)}deg)`;
+    spawnAt-=dt; if(spawnAt<=0){ spawnPipe(); spawnAt=rnd(88,116); }
+    const bl=60, bw=46;
+    for(let i=pipes.length-1;i>=0;i--){
+      const p=pipes[i]; p.x-=2.5*dt;
+      p.top.style.transform=`translateX(${p.x}px)`; p.bot.style.transform=`translateX(${p.x}px)`;
+      if(!p.passed&&p.x+52<bl){ p.passed=true; score++; $('#flapScore').textContent=score; blip(900,.06,'triangle',.07); }
+      if(p.x<-70){ p.top.remove(); p.bot.remove(); pipes.splice(i,1); continue; }
+      if(p.x<bl+bw-10 && p.x+52>bl+10){ if(y<p.gapY+4 || y+30>p.gapY+GAP-4) return end(); }
+    }
+    if(live) raf=requestAnimationFrame(loop);
+  }
+  function end(){
+    live=false; cancelAnimationFrame(raf);
+    if(score>best){ best=score; store.set('flapBest',best); $('#flapBest').textContent=best; sfx.win(); } else sfx.bad();
+    msg.innerHTML=`<div style="font-size:24px" class="display">Flew ${score} 🌸</div><div class="tiny">${score<3?'The blossoms won this round.':score<10?'Solid flying!':'Certified sky bunny.'}</div>`;
+    msg.classList.remove('hide');
+  }
+  $('#flapStart').onclick=()=>{ if(live) return; reset(); live=true; msg.classList.add('hide'); raf=requestAnimationFrame(loop); };
+})();
+
+/* ================= GAME: Bunny Jigsaw ================= */
+(function(){
+  const wrap=$('#jigWrap'); const N=3;
+  let img=null, order=[], sel=null;
+  function builtinSrc(){
+    const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300">
+      <rect width="300" height="300" fill="#FFE9F1"/><circle cx="230" cy="60" r="34" fill="#FFC6DB"/>
+      <circle cx="70" cy="230" r="40" fill="#DDD1F5"/>
+      <ellipse cx="112" cy="90" rx="16" ry="42" fill="#fff" stroke="#D98CAF" stroke-width="4"/>
+      <ellipse cx="168" cy="90" rx="16" ry="42" fill="#fff" stroke="#D98CAF" stroke-width="4"/>
+      <circle cx="140" cy="160" r="58" fill="#fff" stroke="#D98CAF" stroke-width="4"/>
+      <circle cx="122" cy="152" r="7" fill="#3B2A33"/><circle cx="158" cy="152" r="7" fill="#3B2A33"/>
+      <ellipse cx="105" cy="168" rx="10" ry="6" fill="#F58AB4" opacity=".4"/>
+      <ellipse cx="175" cy="168" rx="10" ry="6" fill="#F58AB4" opacity=".4"/>
+      <circle cx="40" cy="248" r="10" fill="#F58AB4"/><circle cx="255" cy="255" r="8" fill="#79BCA8"/></svg>`;
+    return 'data:image/svg+xml;base64,'+btoa(svg);
+  }
+  function load(src){ img=new Image(); img.onload=()=>{ order=[...Array(N*N).keys()].sort(()=>Math.random()-.5); sel=null; render(); }; img.src=src; }
+  function render(){
+    wrap.innerHTML='';
+    order.forEach((piece,pos)=>{
+      const px=piece%N, py=Math.floor(piece/N);
+      const cell=document.createElement('div'); cell.className='jigCell';
+      cell.style.backgroundImage=`url(${img.src})`; cell.style.backgroundPosition=`${px*50}% ${py*50}%`;
+      cell.onclick=()=>tap(pos,cell);
+      wrap.appendChild(cell);
+    });
+    checkSolved();
+  }
+  function tap(pos,cell){
+    if(sel===null){ sel=pos; cell.classList.add('sel'); return; }
+    if(sel===pos){ cell.classList.remove('sel'); sel=null; return; }
+    [order[sel],order[pos]]=[order[pos],order[sel]]; sel=null; sfx.click(); render();
+  }
+  function checkSolved(){
+    if(order.every((p,i)=>p===i)){ $('#jigSay').textContent='Solved! 🧩💖'; sfx.win(); rain(['🧩','🌸']); }
+    else $('#jigSay').textContent='Tap two pieces to swap them.';
+  }
+  $('#jigShuffle').onclick=()=>{ order=[...Array(N*N).keys()].sort(()=>Math.random()-.5); sel=null; render(); };
+  window.__jigOfferPhoto=dataUrl=>{ const b=$('#jigUsePhoto'); b.style.display='inline-block';
+    b.onclick=()=>{ load(dataUrl); toast('using your photobooth shot 📸'); }; };
+  load(builtinSrc());
+})();
+
+/* ================= GAME: Tic-Tac-Toe vs Bunny ================= */
+(function(){
+  const grid=$('#tttGrid'); let board=Array(9).fill(null), over=false;
+  const LINES=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+  function winner(b){ for(const [a,c,d] of LINES) if(b[a]&&b[a]===b[c]&&b[a]===b[d]) return b[a]; return b.includes(null)?null:'tie'; }
+  function bunnyMove(){
+    const empty=board.map((v,i)=>v?null:i).filter(v=>v!==null);
+    for(const i of empty){ const t=[...board]; t[i]='o'; if(winner(t)==='o') return i; }
+    for(const i of empty){ const t=[...board]; t[i]='x'; if(winner(t)==='x') return i; }
+    if(!board[4]) return 4;
+    const corners=[0,2,6,8].filter(i=>!board[i]); if(corners.length) return pick(corners);
+    return pick(empty);
+  }
+  function render(){
+    grid.innerHTML=board.map((v,i)=>`<button class="tttCell" data-i="${i}" ${v||over?'disabled':''}>${v==='x'?'❌':v==='o'?'🐰':''}</button>`).join('');
+    $$('.tttCell',grid).forEach(b=>b.onclick=()=>play(+b.dataset.i));
+  }
+  function play(i){
+    if(over||board[i]) return;
+    board[i]='x'; sfx.click();
+    let w=winner(board);
+    if(!w){ board[bunnyMove()]='o'; sfx.boop(); w=winner(board); }
+    render();
+    if(w){ over=true;
+      $('#tttSay').textContent = w==='x'?'You win! The bunny is shocked. 🎉' : w==='o'?'The bunny wins. It will not be humble about it.' : "Tie — nobody's ego survives intact.";
+      if(w==='x'){ sfx.win(); rain(['🎉','🌸']); } else if(w==='o') sfx.bad();
+    } else $('#tttSay').textContent='Your move.';
+  }
+  $('#tttReset').onclick=()=>{ board=Array(9).fill(null); over=false; $('#tttSay').textContent='Your move.'; render(); };
+  render();
+})();
+
+/* ================= GAME: Coloring Book ================= */
+(function(){
+  const svg=$('#colorSVG');
+  svg.innerHTML=`<ellipse cx="100" cy="180" rx="60" ry="8" fill="#00000010"/>
+    <ellipse class="fillable" data-part="earL" cx="72" cy="55" rx="16" ry="42" fill="#fff"/>
+    <ellipse class="fillable" data-part="earR" cx="128" cy="55" rx="16" ry="42" fill="#fff"/>
+    <circle class="fillable" data-part="head" cx="100" cy="115" r="55" fill="#fff"/>
+    <circle cx="86" cy="108" r="6" fill="#3B2A33"/><circle cx="114" cy="108" r="6" fill="#3B2A33"/>
+    <ellipse class="fillable" data-part="f1" cx="30" cy="150" rx="16" ry="10" fill="#fff"/>
+    <ellipse class="fillable" data-part="f2" cx="170" cy="150" rx="16" ry="10" fill="#fff"/>
+    <circle class="fillable" data-part="f1c" cx="30" cy="150" r="6" fill="#fff"/>
+    <circle class="fillable" data-part="f2c" cx="170" cy="150" r="6" fill="#fff"/>`;
+  const colors=['#F58AB4','#FFC6DB','#AEE3D2','#FFF0C9','#DDD1F5','#8FC7E8','#FFFFFF','#453039'];
+  let cur=colors[0];
+  $('#colorPalette').innerHTML=colors.map(c=>`<div class="swat${c===cur?' on':''}" data-c="${c}" style="background:${c}"></div>`).join('');
+  $$('.swat',$('#colorPalette')).forEach(s=>s.onclick=()=>{ cur=s.dataset.c;
+    $$('.swat',$('#colorPalette')).forEach(x=>x.classList.remove('on')); s.classList.add('on'); });
+  $$('.fillable',svg).forEach(el=>el.addEventListener('click',()=>{ el.setAttribute('fill',cur); sfx.click(); }));
+  $('#colorReset').onclick=()=>{ $$('.fillable',svg).forEach(el=>el.setAttribute('fill','#fff')); sfx.click(); };
+})();
+
+/* ================= GAME: Petal Words (Wordle) ================= */
+(function(){
+  const WORDS=['BUNNY','SWEET','PETAL','CRUSH','SMILE','FRESH','CANDY','PEACH','HONEY','CHARM',
+    'DREAM','HAPPY','LUCKY','DANCE','MUSIC','LIGHT','CLOUD','BLOOM','FLUFF','GRACE','SPARK','QUIET','TULIP','MAGIC','GLEAM','CRISP'];
+  const KEYROWS=['QWERTYUIOP','ASDFGHJKL','ZXCVBNM'];
+  let answer='', row=0, col=0, guesses=[], over=false;
+  function cellClass(ri,ci){
+    const g=guesses[ri], ch=g[ci]; if(!ch) return '';
+    if(ch===answer[ci]) return 'hit';
+    const total=answer.split('').filter(c=>c===ch).length;
+    const hits=g.filter((c,i)=>c===ch&&answer[i]===c).length;
+    const usedBefore=g.slice(0,ci).filter((c,i)=>c===ch&&answer[i]!==c).length;
+    return (answer.includes(ch)&&(hits+usedBefore)<total)?'near':'miss';
+  }
+  function renderGrid(){
+    $('#wdGrid').innerHTML=guesses.map((g,ri)=>`<div class="wdRow">${g.map((ch,ci)=>
+      `<div class="wdCell ${ri<row?cellClass(ri,ci):''}">${ch}</div>`).join('')}</div>`).join('');
+  }
+  function renderKeys(){
+    const rank={miss:0,near:1,hit:2}, used={};
+    for(let r=0;r<row;r++) for(let c=0;c<5;c++){ const ch=guesses[r][c], cl=cellClass(r,c);
+      if(!(ch in used)||rank[cl]>rank[used[ch]]) used[ch]=cl; }
+    $('#wdKeys').innerHTML=KEYROWS.map((r,ri)=>r.split('').map(k=>`<button class="wdKey${used[k]?' '+used[k]:''}" data-k="${k}">${k}</button>`).join('')
+      +(ri===2?`<button class="wdKey wide" data-k="ENTER">enter</button><button class="wdKey wide" data-k="BACK">⌫</button>`:'')).join('');
+    $$('.wdKey',$('#wdKeys')).forEach(b=>b.onclick=()=>handleKey(b.dataset.k));
+  }
+  function handleKey(k){
+    if(over) return;
+    if(k==='BACK'){ if(col>0){ col--; guesses[row][col]=''; renderGrid(); } return; }
+    if(k==='ENTER'){
+      if(col<5){ $('#wdSay').textContent='Five letters first 🌷'; return; }
+      const g=guesses[row].join(''); row++; col=0; renderGrid(); renderKeys();
+      if(g===answer){ over=true; sfx.win(); rain(['🌷','🎉']); $('#wdSay').textContent='Got it! 🌷'; }
+      else if(row>=6){ over=true; sfx.bad(); $('#wdSay').textContent=`So close — it was ${answer}.`; }
+      else sfx.click();
+      return;
+    }
+    if(/^[A-Z]$/.test(k)&&col<5&&row<6){ guesses[row][col]=k; col++; renderGrid(); sfx.click(); }
+  }
+  function newWord(){ answer=pick(WORDS); row=0; col=0; over=false; guesses=Array.from({length:6},()=>Array(5).fill(''));
+    renderGrid(); renderKeys(); $('#wdSay').textContent='Guess the word 🌷'; }
+  addEventListener('keydown',e=>{
+    if(!$('#p-games').classList.contains('on')||e.target.tagName==='INPUT') return;
+    const k=e.key.toUpperCase();
+    if(k==='ENTER') handleKey('ENTER'); else if(k==='BACKSPACE') handleKey('BACK'); else if(/^[A-Z]$/.test(k)) handleKey(k);
+  });
+  $('#wdNew').onclick=newWord;
+  newWord();
+})();
+
+/* ================= FIDGET: Snow Globe ================= */
+(function(){
+  const wrap=$('#globeWrap'), cv=$('#globeCanvas'), cx=cv.getContext('2d');
+  let W,H,particles=[],vx=0,vy=0,dragging=false,lastX=0,lastY=0,lastT=0;
+  function size(){ const r=wrap.getBoundingClientRect(); W=cv.width=r.width; H=cv.height=r.height; }
+  function make(){ particles=[]; for(let i=0;i<40;i++) particles.push({x:rnd(0,W),y:rnd(0,H),r:rnd(2,4),vx:0,vy:0,e:pick(['🌸','❀'])}); }
+  function draw(){
+    if(W&&H){
+      cx.clearRect(0,0,W,H);
+      cx.save(); cx.beginPath(); cx.arc(W/2,H/2,W/2-4,0,7); cx.clip();
+      cx.fillStyle='#fff8fb'; cx.fillRect(0,0,W,H);
+      particles.forEach(p=>{
+        p.vy+=0.05; p.vx*=0.985; p.vy*=0.985; p.x+=p.vx+vx*0.05; p.y+=p.vy+vy*0.05;
+        if(p.y>H-6){p.y=H-6;p.vy*=-0.2;} if(p.y<6){p.y=6;p.vy*=-0.2;}
+        if(p.x<6){p.x=6;p.vx*=-0.2;} if(p.x>W-6){p.x=W-6;p.vx*=-0.2;}
+        cx.font=(p.r*4)+'px serif'; cx.fillText(p.e,p.x-p.r*2,p.y+p.r*2);
+      });
+      cx.restore(); vx*=0.9; vy*=0.9;
+    }
+    requestAnimationFrame(draw);
+  }
+  const posOf=e=>{ const t=e.touches?e.touches[0]:e; const r=cv.getBoundingClientRect(); return [t.clientX-r.left,t.clientY-r.top]; };
+  wrap.addEventListener('pointerdown',e=>{ dragging=true; [lastX,lastY]=posOf(e); lastT=performance.now(); });
+  addEventListener('pointermove',e=>{
+    if(!dragging) return; const [x,y]=posOf(e); const t=performance.now(); const dt=Math.max(8,t-lastT);
+    vx=(x-lastX)/dt*16; vy=(y-lastY)/dt*16;
+    particles.forEach(p=>{ p.vx+=vx*0.08; p.vy+=vy*0.08-1; });
+    lastX=x; lastY=y; lastT=t;
+  });
+  addEventListener('pointerup',()=>dragging=false);
+  size(); make(); draw();
+  new ResizeObserver(()=>{ const had=W; size(); if(!had&&W) make(); }).observe(wrap);
+})();
+
+/* ================= FIDGET: Bubble Tea Maker ================= */
+(function(){
+  const svg=$('#cupSVG'); let layers=[], cups=store.get('teaCups',0);
+  $('#teaCount').textContent='cups made: '+cups;
+  function render(){
+    let y=148, parts='';
+    layers.forEach(l=>{ parts+=`<rect x="20" y="${y-18}" width="80" height="18" fill="${l==='tea'?'#C88A4A':l==='milk'?'#FFF3DC':'#5B3A2A'}"/>`;
+      if(l==='boba') parts+=[0,1,2,3].map(i=>`<circle cx="${30+i*16}" cy="${y-9}" r="5" fill="#3A2418"/>`).join('');
+      y-=18; });
+    svg.innerHTML=`<clipPath id="cupClip"><path d="M20 42 L100 42 L91 148 Q60 155 29 148 Z"/></clipPath>
+      <g clip-path="url(#cupClip)">${parts}</g>
+      <path d="M18 40 L102 40 L92 150 Q60 158 28 150 Z" fill="none" stroke="#D98CAF" stroke-width="4"/>
+      <rect x="10" y="28" width="100" height="14" rx="4" fill="#fff" stroke="#D98CAF" stroke-width="4"/>
+      <rect x="55" y="8" width="10" height="24" fill="#fff" stroke="#D98CAF" stroke-width="3"/>`;
+  }
+  function add(l){ if(layers.length>=5){ toast('cup is full! 🧋'); return; } layers.push(l); render(); }
+  $('#teaBoba').onclick=()=>{ add('boba'); sfx.pop(); };
+  $('#teaMilk').onclick=()=>{ add('milk'); sfx.click(); };
+  $('#teaTea').onclick=()=>{ add('tea'); sfx.click(); };
+  $('#teaShake').onclick=()=>{ svg.style.transform='rotate(-4deg)'; blip(300,.1,'sine',.06);
+    setTimeout(()=>svg.style.transform='rotate(4deg)',90); setTimeout(()=>svg.style.transform='',180); sfx.pop(); };
+  $('#teaReset').onclick=()=>{ if(layers.length){ cups++; store.set('teaCups',cups); $('#teaCount').textContent='cups made: '+cups; toast('cup finished! 🧋'); }
+    layers=[]; render(); };
+  render();
+})();
+
+/* ================= FIDGET: Paint Splatter ================= */
+(function(){
+  const cv=$('#paintCanvas'), cx=cv.getContext('2d');
+  const cols=['#F58AB4','#FFC6DB','#AEE3D2','#FFF0C9','#DDD1F5','#8FC7E8'];
+  function size(){ cv.width=cv.clientWidth*devicePixelRatio; cv.height=cv.clientHeight*devicePixelRatio;
+    cx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0); }
+  function splat(x,y){
+    const col=pick(cols), n=8+Math.floor(Math.random()*6), R=rnd(14,34);
+    cx.fillStyle=col; cx.beginPath();
+    for(let i=0;i<n;i++){ const a=(i/n)*6.283, r=R*rnd(.4,1); const px=x+Math.cos(a)*r, py=y+Math.sin(a)*r; i===0?cx.moveTo(px,py):cx.lineTo(px,py); }
+    cx.closePath(); cx.fill();
+    for(let i=0;i<4;i++){ cx.beginPath(); cx.arc(x+rnd(-R,R),y+rnd(-R,R),rnd(2,6),0,7); cx.fillStyle=col; cx.fill(); }
+  }
+  const pos=e=>{ const r=cv.getBoundingClientRect(); return [e.clientX-r.left,e.clientY-r.top]; };
+  let down=false;
+  cv.addEventListener('pointerdown',e=>{ down=true; const [x,y]=pos(e); splat(x,y); sfx.pop(); });
+  cv.addEventListener('pointermove',e=>{ if(down&&Math.random()<.3){ const [x,y]=pos(e); splat(x,y); } });
+  addEventListener('pointerup',()=>down=false);
+  $('#paintClear').onclick=()=>{ cx.clearRect(0,0,cv.clientWidth,cv.clientHeight); sfx.click(); };
+  $('#paintSave').onclick=()=>{
+    cv.toBlob(b=>{ if(!b) return; const fname=`bunny-blossoms-paint-${Date.now().toString().slice(-6)}.png`;
+      try{ const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=fname;
+        document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),4000); toast('saved 💾'); }
+      catch(e){ toast('long-press the canvas to save'); } },'image/png');
+  };
+  new ResizeObserver(size).observe(cv);
+  size();
+})();
+
+/* ================= FIDGET: Soundboard ================= */
+(function(){
+  const sounds=[
+    {ic:'🫧',name:'Pop',fn:()=>sfx.pop()}, {ic:'👆',name:'Boop',fn:()=>sfx.boop()},
+    {ic:'🎉',name:'Ta-da',fn:()=>sfx.win()}, {ic:'🔔',name:'Chime',fn:()=>blip(880,.25,'sine',.1,1400)},
+    {ic:'📄',name:'Page',fn:()=>{blip(300,.03,'square',.05); setTimeout(()=>blip(500,.03,'square',.04),40);}},
+    {ic:'🌧️',name:'Rain',fn:()=>{for(let i=0;i<6;i++) setTimeout(()=>blip(rnd(500,1200),.03,'sine',.03),i*45);}},
+    {ic:'😤',name:'Bonk',fn:()=>sfx.bad()},
+    {ic:'✨',name:'Sparkle',fn:()=>{[1200,1500,1800].forEach((f,i)=>setTimeout(()=>blip(f,.06,'triangle',.06),i*40));}}
+  ];
+  $('#sbGrid').innerHTML=sounds.map((s,i)=>`<button class="sbBtn" data-i="${i}"><span class="ic">${s.ic}</span>${s.name}</button>`).join('');
+  $$('.sbBtn',$('#sbGrid')).forEach((b,i)=>b.onclick=()=>sounds[i].fn());
 })();
 
 /* ================= easter eggs ================= */
